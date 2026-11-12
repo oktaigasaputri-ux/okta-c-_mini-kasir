@@ -22,10 +22,10 @@ jobs:
         shell: cmd
         run: dir /s /b *.cpp
 
-      - name: Compile C++
+            - name: Compile C++
         shell: cmd
         run: |
-          cl /EHsc /std:c++17 /O2 "okta c++.cpp" /Fe:program.exe
+          cl /EHsc /std:c++17 /O2 okta_mini_kasir.cpp /Fe:program.exe
           if errorlevel 1 exit /b 1
 
       - name: Upload EXE
