@@ -1,10 +1,8 @@
-
-name: Build C++ EXE
+name: Build C++ to EXE
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -12,23 +10,24 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Download source code
         uses: actions/checkout@v4
 
-      - name: Setup MSVC
-        uses: ilammy/msvc-dev-cmd@v1
+      - name: Setup MinGW compiler
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: mingw-w64-ucrt-x86_64-gcc
 
-      - name: Compile C++
-        shell: cmd
+      - name: Compile C++ to EXE
+        shell: msys2 {0}
         run: |
-          if not exist "okta c++.cpp" (
-            echo ERROR: File C++ tidak ditemukan!
-            exit /b 1
-          )
-          cl /EHsc /std:c++17 /O2 "okta c++.cpp" /Fe:program.exe
+          g++ -std=c++17 -O2 -static nana2.cpp -o nana2.exe
 
       - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
-          name: program-exe
-          path: program.exe
+          name: compiled-exe
+          path: nana2.exe
+          if-no-files-found: error
