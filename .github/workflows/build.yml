@@ -1,0 +1,34 @@
+
+name: Build C++ EXE
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Compile C++
+        shell: cmd
+        run: |
+          if not exist "okta c++.cpp" (
+            echo ERROR: File C++ tidak ditemukan!
+            exit /b 1
+          )
+          cl /EHsc /std:c++17 /O2 "okta c++.cpp" /Fe:program.exe
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: program-exe
+          path: program.exe
