@@ -22,7 +22,7 @@ jobs:
         shell: cmd
         run: dir /s /b *.cpp
 
-            - name: Compile C++
+      - name: Compile C++
         shell: cmd
         run: |
           cl /EHsc /std:c++17 /O2 okta_mini_kasir.cpp /Fe:program.exe
